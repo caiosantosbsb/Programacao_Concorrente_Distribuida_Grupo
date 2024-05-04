@@ -1,11 +1,16 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class HotelSimulation {
     public static void main(String[] args) {
         //Instanciar variaveis
         int numQuartos = 10;
+        int numHospedes = 50;
         int numCamareiras = 10;
+        int numRecepcionistas = 5;
                 
         //Instanciar quartos
         //Quartos incialmente limpos, vazios e numerados
@@ -14,37 +19,23 @@ public class HotelSimulation {
             quartos.add(new Quarto(i));
         }
 
-        // Simula a criação de uma camareira e sua atuação
-        Camareira camareira = new Camareira(1, quartos);
-        Thread threadCamareira = new Thread(camareira);
-        threadCamareira.start();
-
-        // Verificar se a camareira está funcionando após algum tempo
-        try {
-            Thread.sleep(10000);  // Aguardar um tempo para a camareira atuar
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.out.println("Thread principal interrompida.");
+        ExecutorService executor = Executors.newFixedThreadPool(numHospedes + numCamareiras + numRecepcionistas);
+        for (int i = 1; i <= numHospedes; i++) {
+            executor.submit(new Hospede(i, quartos));        
         }
-
-        // Verificar o estado dos quartos
-        for (Quarto quarto : quartos) {
-            System.out.println("Quarto " + quarto.getNumero() + " está limpo? " + !quarto.isLimpo());
+        for (int i = 1; i <= numCamareiras; i++) {
+            executor.submit(new Camareira(i, quartos));
         }
-
-        // Parar a camareira
-        threadCamareira.interrupt();
+        for (int i = 1; i <= numRecepcionistas; i++) {
+            executor.submit(new Recepcionista(i, quartos));
+        }
         
-        //Ver quartos criados
-        //visualizarQuartos(quartos);
-    } 
-    /* Validar classe quarto
-    private static void visualizarQuartos(List<Quarto> quartos) {
-        for (Quarto quarto : quartos) {
-            System.out.println("Quarto " + quarto.getNumero() +
-                               ": Ocupado? " + !quarto.isOcupado() +   // Note que invertemos a lógica baseado na sua implementação original
-                               ", Limpo? " + !quarto.isLimpo() +       // Idem
-                               ", Chave na Recepção? " + quarto.isChaveNaRecepcao());
+        
+        try {
+            executor.awaitTermination(20000, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            executor.shutdown();
+            System.out.println("-----------");
         }
-    }*/
+    } 
 }

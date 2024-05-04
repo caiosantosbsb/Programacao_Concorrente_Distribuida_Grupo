@@ -3,18 +3,15 @@ public class Quarto {
     private boolean ocupado;
     private boolean limpo;
     private boolean chaveNaRecepcao;
-    
-    //Metodo construtor de quarto
+
     public Quarto(int numero) {
         this.numero = numero;
         this.ocupado = false;
         this.limpo = true;
         this.chaveNaRecepcao = true;
     }
-    
-    //Metodos synchronized para garantir apenas uma thread por vez
-    //Garantir consistencia
-    public synchronized boolean ocupar() {
+
+    public synchronized boolean ocupar(int pessoas) {
         if (!ocupado && chaveNaRecepcao) {
             ocupado = true;
             limpo = false;
@@ -23,14 +20,19 @@ public class Quarto {
         }
         return false;
     }
-    
-    //Metodos Gets and Setters
+
     public synchronized void desocupar() {
         ocupado = false;
         chaveNaRecepcao = true;
         System.out.println("🔑 Quarto " + numero + " desocupado. Chave devolvida à recepção.");
     }
 
+    public synchronized void passear() {
+        ocupado = true;
+        chaveNaRecepcao = true;
+        System.out.println("🔑 Quarto " + numero + " disponível para limpeza. Hospede foi passear.");
+    }    
+    
     public synchronized void limpar() {
         limpo = true;
         System.out.println("🧹 Quarto " + numero + " limpo.");
@@ -50,5 +52,5 @@ public class Quarto {
 
     public boolean isChaveNaRecepcao() {
         return chaveNaRecepcao;
-    }
+    }    
 }
