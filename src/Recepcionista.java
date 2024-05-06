@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recepcionista implements Runnable {
+public class Recepcionista implements Runnable { // Criação da classe e atributos
     private final int id;
     private final List<Quarto> quartos;
     private final List<Integer> filaEspera;
 
-    public Recepcionista(int id, List<Quarto> quartos) {
+    public Recepcionista(int id, List<Quarto> quartos) { //Metodo construtor da classe
         this.id = id;
         this.quartos = quartos;
         this.filaEspera = new ArrayList<>();
@@ -40,7 +40,8 @@ public class Recepcionista implements Runnable {
                 }
             }
         } catch (InterruptedException e) {
-            e.fillInStackTrace();
+            Thread.currentThread().interrupt();
+            System.out.println("Hospede " + id + " foi interrompido e parado.");
         }
     }
 }

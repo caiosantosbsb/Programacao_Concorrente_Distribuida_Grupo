@@ -1,16 +1,17 @@
-public class Quarto {
+public class Quarto { //Classe e atributos
     private final int numero;
     private boolean ocupado;
     private boolean limpo;
     private boolean chaveNaRecepcao;
 
-    public Quarto(int numero) {
+    public Quarto(int numero) { //Metodo Construtor da classe quarto
         this.numero = numero;
         this.ocupado = false;
         this.limpo = true;
         this.chaveNaRecepcao = true;
     }
-
+    
+    //Metodos gets e sets com sincronização
     public synchronized boolean ocupar(int pessoas) {
         if (!ocupado && chaveNaRecepcao) {
             ocupado = true;

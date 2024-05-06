@@ -11,15 +11,17 @@ public class HotelSimulation {
         int numHospedes = 50;
         int numCamareiras = 10;
         int numRecepcionistas = 5;
-                
+        ExecutorService executor = null; 
+        
         //Instanciar quartos
         //Quartos incialmente limpos, vazios e numerados
         List<Quarto> quartos = new ArrayList<>();
         for (int i = 1; i <= numQuartos; i++) {
             quartos.add(new Quarto(i));
-        }
-
-        ExecutorService executor = Executors.newFixedThreadPool(numHospedes + numCamareiras + numRecepcionistas);
+        }      
+        //Criação e execução das threads
+        try {
+        executor = Executors.newFixedThreadPool(numHospedes + numCamareiras + numRecepcionistas);
         for (int i = 1; i <= numHospedes; i++) {
             executor.submit(new Hospede(i, quartos));        
         }
@@ -30,12 +32,19 @@ public class HotelSimulation {
             executor.submit(new Recepcionista(i, quartos));
         }
         
-        
-        try {
-            executor.awaitTermination(20000, TimeUnit.SECONDS);
+        // Desligar o executor para que não aceite novas tarefas
+        executor.shutdown();
+    
+        // Aguardar finalização das threads ou encerramento após timeout
+        executor.awaitTermination(20000, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            executor.shutdown();
-            System.out.println("-----------");
+            System.out.println("-----Interrompido------");
+        } finally {
+            if (executor != null && !executor.isTerminated()) {
+                // Tenta encerrar as tarefas ativas
+                executor.shutdownNow();
+            }
+            System.out.println("-----Executor Finalizado------");
         }
     } 
 }

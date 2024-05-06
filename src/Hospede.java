@@ -1,19 +1,20 @@
 import java.util.List;
 import java.util.Random;
 
-public class Hospede implements Runnable  {
+public class Hospede implements Runnable  { // Criação da classe e atributos
     private final int id;
     private final List<Quarto> quartos;
     private final Random random;
     private final int pessoas;
     
-    public Hospede(int id, List<Quarto> quartos) {
+    public Hospede(int id, List<Quarto> quartos) { //Metodo construtor da classe
         this.id = id;
         this.quartos = quartos;
         this.random = new Random();
         this.pessoas = random.nextInt(8) + 1;
     }
 
+    //Metodo get
     public int getId() {
         return id;
     }
@@ -48,6 +49,7 @@ public class Hospede implements Runnable  {
                             quarto.passear();
                             System.out.println("🚶‍ Hóspede " + id + " saiu para passeio 🔑 chave na recepção  " + quarto.getNumero());                                                      
                         } else{
+                        // Simulação Checkout do hotel    
                             quarto.desocupar();
                         }
                         if (quarto.isLimpo()) {

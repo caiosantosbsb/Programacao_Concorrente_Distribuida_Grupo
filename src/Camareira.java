@@ -23,7 +23,8 @@ public class Camareira implements Runnable { //ser executados como threads
                 }
             }
         } catch (InterruptedException e) {
-            e.fillInStackTrace();
+            Thread.currentThread().interrupt();
+            System.out.println("-----Interrompido------");
         }
     }
 }
