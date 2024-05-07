@@ -26,7 +26,7 @@ public class HotelSimulation {
             executor.submit(new Hospede(i, quartos));        
         }
         for (int i = 1; i <= numCamareiras; i++) {
-            executor.submit(new Camareira(i, quartos));
+            executor.submit(new Camareira( quartos));
         }
         for (int i = 1; i <= numRecepcionistas; i++) {
             executor.submit(new Recepcionista(i, quartos));

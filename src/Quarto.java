@@ -1,22 +1,25 @@
-public class Quarto { //Classe e atributos
+public class Quarto { //Classe quarto
     private final int numero;
     private boolean ocupado;
     private boolean limpo;
     private boolean chaveNaRecepcao;
+    private int ultimoHospedeId; 
 
-    public Quarto(int numero) { //Metodo Construtor da classe quarto
+    public Quarto(int numero) { // Metodo construtor de quarto
         this.numero = numero;
         this.ocupado = false;
         this.limpo = true;
         this.chaveNaRecepcao = true;
+        this.ultimoHospedeId = -1;
     }
     
-    //Metodos gets e sets com sincronização
-    public synchronized boolean ocupar(int pessoas) {
+  
+    public synchronized boolean ocupar(int hospedeId) { //Funcao para ocupar quarto
         if (!ocupado && chaveNaRecepcao) {
             ocupado = true;
             limpo = false;
             chaveNaRecepcao = false;
+            ultimoHospedeId = hospedeId; //Id para verificação da recepcionista
             return true;
         }
         return false;
@@ -29,8 +32,6 @@ public class Quarto { //Classe e atributos
     }
 
     public synchronized void passear() {
-        ocupado = true;
-        chaveNaRecepcao = true;
         System.out.println("🔑 Quarto " + numero + " disponível para limpeza. Hospede foi passear.");
     }    
     
@@ -44,14 +45,18 @@ public class Quarto { //Classe e atributos
     }
 
     public boolean isOcupado() {
-        return !ocupado;
+        return ocupado;
     }
 
     public boolean isLimpo() {
-        return !limpo;
+        return limpo;
     }
 
     public boolean isChaveNaRecepcao() {
         return chaveNaRecepcao;
+    }
+
+    public int getUltimoHospedeId() {
+        return ultimoHospedeId;
     }    
 }
